@@ -97,6 +97,12 @@ let gameFrame = 0;
 let frameX = 0;
 let frame_count = spriteAnimation[state].loc.length;
 let stagger_frame = 5;
+
+// console.log(spriteAnimation[state].loc.length)
+
+// commented out because not used anymore
+// let frameY = 0;
+
 ////////////////////////////////////////////////
 
 
@@ -116,7 +122,7 @@ function populate_dropdown() {
         tmp.innerHTML = element.name;
         tmp.value = element.name;
     })
-
+    
     let label = document.createElement('label');
     document.getElementsByClassName('viewport')[0].insertBefore(label, dropdown);
     label.setAttribute('for', 'dropdown');
@@ -125,24 +131,30 @@ function populate_dropdown() {
 populate_dropdown();
 
 
-// event listener for dropdown
-dropdown.addEventListener('change', function(e) {
-    state = e.target.value;
+// event listener
+dropdown.addEventListener('change', () => {
+    console.log(state);
+    gameFrame = 0;
+    frameResultY = spriteAnimation[state].loc[0].y; 
+    frame_count = spriteAnimation[state].loc.length;
+    console.log(frame_count);
+    console.log(frameResultX);
+    console.log(spriteAnimation[state].loc[0].x)
+    console.log(frameResultY);
+    console.log(spriteAnimation[state].loc[0].y)
 })
-////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////
 // animation begins
 function animate() {
-    ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    
-    // calculate the frame position
-    let position = Math.floor(gameFrame/stagger_frame) % spriteAnimation[state].loc.length;
+
+    state = dropdown.value;
 
     frameResultX = spriteAnimation[state].loc[position].x;
     frameResultY = spriteAnimation[state].loc[position].y;
 
+    ctx.clearRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
+    // ctx.fillRect(x,0,200,200);
     ctx.drawImage(PLAYER_SPRITE, frameResultX, frameResultY, SPRITE_WIDTH, SPRITE_HEIGHT, 0,0, SPRITE_WIDTH/2, SPRITE_HEIGHT/2);
     
     gameFrame ++;
