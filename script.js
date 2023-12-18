@@ -1,3 +1,6 @@
+////////////////////////////////////////////////
+// canvas
+////////////////////////////////////////////////
 // canvas
 const canvas = document.getElementById('sprite');
 const ctx = canvas.getContext('2d');
@@ -12,6 +15,8 @@ let dropdown;
 
 
 ////////////////////////////////////////////////
+// Character
+////////////////////////////////////////////////
 // make a new instance of player character image
 const PLAYER_SPRITE = new Image();
 PLAYER_SPRITE.src='static/asset_shadow_dog.png';
@@ -21,6 +26,8 @@ const SPRITE_HEIGHT = 523;
 ////////////////////////////////////////////////
 
 
+////////////////////////////////////////////////
+// objects and mapping
 ////////////////////////////////////////////////
 // Sprite object, name and frames
 let sprite = [
@@ -87,6 +94,8 @@ map(sprite);
 
 
 ////////////////////////////////////////////////
+// global variables and initialization
+////////////////////////////////////////////////
 // game frames and frame count
 let state = 'idle';
 let previous_state = state;
@@ -97,17 +106,13 @@ let gameFrame = 0;
 let frameX = 0;
 let frame_count = spriteAnimation[state].loc.length;
 let stagger_frame = 5;
-
-// console.log(spriteAnimation[state].loc.length)
-
-// commented out because not used anymore
-// let frameY = 0;
-
 ////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////
 // dropdown menu creation
+////////////////////////////////////////////////
+// dropdown and label
 function populate_dropdown() {
     dropdown = document.createElement('select');
     document.getElementsByClassName('viewport')[0].insertBefore(dropdown, canvas);
@@ -133,31 +138,24 @@ populate_dropdown();
 
 
 // event listener
-dropdown.addEventListener('change', () => {
-    console.log(state);
-    gameFrame = 0;
-    frameResultY = spriteAnimation[state].loc[0].y; 
-    frame_count = spriteAnimation[state].loc.length;
-    console.log(frame_count);
-    console.log(frameResultX);
-    console.log(spriteAnimation[state].loc[0].x)
-    console.log(frameResultY);
-    console.log(spriteAnimation[state].loc[0].y)
+dropdown.addEventListener('change', (e) => {
+    state = e.target.value;
 })
+////////////////////////////////////////////////
 
 
+////////////////////////////////////////////////
+// animation
+////////////////////////////////////////////////
 // animation begins
 function animate() {
-
-    state = dropdown.value;
+    ctx.clearRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
 
     let position = Math.floor(gameFrame/stagger_frame) % spriteAnimation[state].loc.length;
 
     frameResultX = spriteAnimation[state].loc[position].x;
     frameResultY = spriteAnimation[state].loc[position].y;
 
-    ctx.clearRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
-    // ctx.fillRect(x,0,200,200);
     ctx.drawImage(PLAYER_SPRITE, frameResultX, frameResultY, SPRITE_WIDTH, SPRITE_HEIGHT, 0,0, SPRITE_WIDTH/2, SPRITE_HEIGHT/2);
     
     gameFrame ++;
