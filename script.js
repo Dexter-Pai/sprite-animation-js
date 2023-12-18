@@ -73,7 +73,7 @@ let spriteAnimation = []
 function map(sprite) {
     sprite.forEach((state, index) => {
         let locations = [];
-        for (i = 0; i < state.frames; i++) {
+        for (let i = 0; i < state.frames; i++) {
             let positionX = i * SPRITE_WIDTH;
             let positionY = index * SPRITE_HEIGHT;
             locations.push({x: positionX, y: positionY});
@@ -91,6 +91,7 @@ console.log(spriteAnimation);
 ////////////////////////////////////////////////
 // game frames and frame count
 let state = 'idle';
+let frameResultX, frameResultY;
 
 let gameFrame = 0;
 
@@ -107,29 +108,6 @@ let stagger_frame = 4;
 
 
 ////////////////////////////////////////////////
-// animation begins
-function animate() {
-
-    let frameResultX = SPRITE_WIDTH * frameX;
-    let frameResultY = spriteAnimation[state].loc[0].y;
-
-    ctx.clearRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
-    // ctx.fillRect(x,0,200,200);
-    ctx.drawImage(PLAYER_SPRITE, frameResultX, frameResultY, SPRITE_WIDTH, SPRITE_HEIGHT, 0,0, SPRITE_WIDTH/2, SPRITE_HEIGHT/2);
-
-    gameFrame ++;
-
-    if (Math.floor(gameFrame % stagger_frame) === 1) {
-
-        // frame_count -1 is because index starts at zero, states are counted as one
-        if(frameX == frame_count -1) frameX = 0;
-        else frameX++;
-    }
-    // console.log(gameFrame);
-    requestAnimationFrame(animate);
-}
-animate();
-
 // dropdown menu creation
 function populate_dropdown() {
     dropdown = document.createElement('select');
@@ -148,8 +126,42 @@ function populate_dropdown() {
 }
 populate_dropdown();
 
+
 // event listener
-document.addEventListener('change', () => {
-    state = dropdown.value;
+dropdown.addEventListener('change', () => {
+    console.log(state);
+    gameFrame = 0;
+    frameResultY = spriteAnimation[state].loc[0].y; 
     frame_count = spriteAnimation[state].loc.length;
+    console.log(frame_count);
+    console.log(frameResultX);
+    console.log(spriteAnimation[state].loc[0].x)
+    console.log(frameResultY);
+    console.log(spriteAnimation[state].loc[0].y)
 })
+
+
+// animation begins
+function animate() {
+
+    state = dropdown.value;
+
+    frameResultX = spriteAnimation[state].loc[frameX].x;
+    frameResultY = spriteAnimation[state].loc[0].y;
+
+    ctx.clearRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
+    // ctx.fillRect(x,0,200,200);
+    ctx.drawImage(PLAYER_SPRITE, frameResultX, frameResultY, SPRITE_WIDTH, SPRITE_HEIGHT, 0,0, SPRITE_WIDTH/2, SPRITE_HEIGHT/2);
+    console.log(frameResultX);
+    gameFrame ++;
+
+    if (Math.floor(gameFrame % stagger_frame) === 1) {
+
+        // frame_count -1 is because index starts at zero, states are counted as one
+        if(frameX == frame_count -1) frameX = 0;
+        else frameX++;
+    }
+    // console.log(gameFrame);
+    requestAnimationFrame(animate);
+}
+animate();
