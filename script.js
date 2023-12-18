@@ -112,6 +112,7 @@ function populate_dropdown() {
     dropdown = document.createElement('select');
     document.getElementsByClassName('viewport')[0].insertBefore(dropdown, canvas);
     dropdown.classList.add('dropdown');
+    dropdown.setAttribute('id','dropdown');
 
 
     dropdown = document.getElementsByClassName('dropdown')[0];
@@ -122,7 +123,7 @@ function populate_dropdown() {
         tmp.innerHTML = element.name;
         tmp.value = element.name;
     })
-    
+
     let label = document.createElement('label');
     document.getElementsByClassName('viewport')[0].insertBefore(label, dropdown);
     label.setAttribute('for', 'dropdown');
@@ -149,6 +150,8 @@ dropdown.addEventListener('change', () => {
 function animate() {
 
     state = dropdown.value;
+
+    let position = Math.floor(gameFrame/stagger_frame) % spriteAnimation[state].loc.length;
 
     frameResultX = spriteAnimation[state].loc[position].x;
     frameResultY = spriteAnimation[state].loc[position].y;
