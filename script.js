@@ -91,6 +91,7 @@ console.log(spriteAnimation);
 ////////////////////////////////////////////////
 // game frames and frame count
 let state = 'idle';
+let previous_state = state;
 let frameResultX, frameResultY;
 
 let gameFrame = 0;
@@ -98,12 +99,6 @@ let gameFrame = 0;
 let frameX = 0;
 let frame_count = spriteAnimation[state].loc.length;
 let stagger_frame = 4;
-
-// console.log(spriteAnimation[state].loc.length)
-
-// commented out because not used anymore
-// let frameY = 0;
-
 ////////////////////////////////////////////////
 
 
@@ -123,45 +118,33 @@ function populate_dropdown() {
         tmp.innerHTML = element.name;
         tmp.value = element.name;
     })
+
 }
 populate_dropdown();
 
 
 // event listener
-dropdown.addEventListener('change', () => {
-    console.log(state);
-    gameFrame = 0;
-    frameResultY = spriteAnimation[state].loc[0].y; 
-    frame_count = spriteAnimation[state].loc.length;
-    console.log(frame_count);
-    console.log(frameResultX);
-    console.log(spriteAnimation[state].loc[0].x)
-    console.log(frameResultY);
-    console.log(spriteAnimation[state].loc[0].y)
+dropdown.addEventListener('change', function(e) {
+    state = e.target.value;
 })
+////////////////////////////////////////////////
 
 
+////////////////////////////////////////////////
 // animation begins
 function animate() {
+    ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+    
 
-    state = dropdown.value;
+    let position = Math.floor(gameFrame/stagger_frame) % spriteAnimation[state].loc.length;
 
-    frameResultX = spriteAnimation[state].loc[frameX].x;
-    frameResultY = spriteAnimation[state].loc[0].y;
+    frameResultX = spriteAnimation[state].loc[position].x;
+    frameResultY = spriteAnimation[state].loc[position].y;
 
     ctx.clearRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
-    // ctx.fillRect(x,0,200,200);
     ctx.drawImage(PLAYER_SPRITE, frameResultX, frameResultY, SPRITE_WIDTH, SPRITE_HEIGHT, 0,0, SPRITE_WIDTH/2, SPRITE_HEIGHT/2);
     console.log(frameResultX);
     gameFrame ++;
-
-    if (Math.floor(gameFrame % stagger_frame) === 1) {
-
-        // frame_count -1 is because index starts at zero, states are counted as one
-        if(frameX == frame_count -1) frameX = 0;
-        else frameX++;
-    }
-    // console.log(gameFrame);
     requestAnimationFrame(animate);
 }
 animate();
