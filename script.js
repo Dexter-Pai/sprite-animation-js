@@ -132,7 +132,7 @@ function populate_dropdown() {
     let label = document.createElement('label');
     document.getElementsByClassName('viewport')[0].insertBefore(label, dropdown);
     label.setAttribute('for', 'dropdown');
-    label.innerHTML = 'Choose animation';
+    label.innerHTML = '&#128526; Greetings RJ !! &#128526;<br><br>Choose animation';
 }
 populate_dropdown();
 
